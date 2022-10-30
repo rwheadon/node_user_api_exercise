@@ -1,0 +1,18 @@
+openapi: 3.0.0
+info:
+  description: I AM A SAMPLE SCAFFOLD CHANGE ME
+  version: 1.0.0
+  title: SAMPLE SCAFFOLD API DOCS
+servers:
+  - url: /api/v1
+
+paths:
+  /user/{id}:
+    $ref: "../routes/user.with.id.routes.yaml"
+  /user:
+    $ref: "../routes/user.routes.yaml"
+  /users:
+    $ref: "../routes/users.routes.yaml"
+  /additional:
+    $ref: "../routes/additional.yaml"
+

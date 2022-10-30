@@ -1,0 +1,25 @@
+get:
+  summary: Returns some test data.
+  #This is the function that would be called from ../../controllers/index.js
+  operationId: fetchSomething
+  description: Test for the api GET operation
+  tags:
+    - additional
+  responses:
+    '200':
+      description: Some sort of data that verifies the scaffold works
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              property1:
+                type: string
+              property2:
+                type: string
+              property3:
+                type: object
+              property4:
+                type: number
+    default:
+      $ref: "../api/responses/server-error.yaml"

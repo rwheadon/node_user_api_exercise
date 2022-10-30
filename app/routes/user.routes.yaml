@@ -1,0 +1,100 @@
+# this file fulfills user requests on the /user path
+
+post:
+  summary: creates a new user
+  operationId: createUser
+  description: Creates a new user. Errors if unique constraint collision.
+  tags:
+    - User
+  requestBody:
+    content:
+      'application/json':
+        schema:
+          properties:
+            firstname:
+              description: firstname
+              type: string
+            lastname:
+              description: lastname
+              type: string
+            username:
+              description: username
+              type: string
+            password:
+              description: password
+              type: string
+          required:
+            - firstname
+            - lastname
+            - username
+            - password
+  responses:
+    '200':
+      description: Returns created user record
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+              username:
+                type: string
+              firstname:
+                type: string
+              lastname:
+                type: string
+              updatedAt:
+                type: string
+              createdAt:
+                type: string
+    default:
+      $ref: "../api/responses/server-error.yaml"
+
+put:
+  summary: updates a user
+  operationId: updateUser
+  description: Updates a user. Errors if not found or permissions are wrong. shcema fields passed in will be updated.
+  tags:
+    - User
+  requestBody:
+    content:
+      'application/json':
+        schema:
+          properties:
+            id:
+              description: user id
+              type: number
+            firstname:
+              description: firstname
+              type: string
+            lastname:
+              description: lastname
+              type: string
+            username:
+              description: username
+              type: string
+          required:
+            - id
+  responses:
+    '200':
+      description: Returns created user record
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+              username:
+                type: string
+              firstname:
+                type: string
+              lastname:
+                type: string
+              updatedAt:
+                type: string
+              createdAt:
+                type: string
+    default:
+      $ref: "../api/responses/server-error.yaml"
