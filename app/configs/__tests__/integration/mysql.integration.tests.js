@@ -11,9 +11,10 @@ async function testDBConnection() {
         return false;
     }
 }
-
-test('Checks that the database is accepting connections', async () => {
-    const connected = await testDBConnection();
-    expect(connected).toBeTruthy();
+describe('MySQL database integration tests', () => {
+    test('Checks that the database is accepting connections', async () => {
+        const connected = await testDBConnection();
+        expect(connected).toBeTruthy();
+    })
 })
 

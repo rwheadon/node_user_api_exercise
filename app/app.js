@@ -12,7 +12,7 @@ const makeApp = async () => {
     const connect = connector(api, apiDefinition) // make the connector
     const app = express() // make the app
     // do any other app stuff, such as wire in passport, use cors etc
-
+    app.use(express.json());
     // This is the endpoint that will display the swagger docs
     app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(apiDefinition));
     connect(app); // attach the routes

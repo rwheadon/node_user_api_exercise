@@ -1,34 +1,4 @@
 # this file fulfills swagger routing on the /user/{id} path
-get:
-  summary: Returns a single user.
-  #This is the function that would be called from ../../controllers/index.js
-  operationId: findUser
-  description: User GET operation. uses additional parameters if provided.
-  tags:
-    - User
-  responses:
-    '200':
-      description: Returns single user if found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              id:
-                type: number
-              username:
-                type: string
-              firstname:
-                type: string
-              lastname:
-                type: string
-              updatedAt:
-                type: string
-              createdAt:
-                type: string
-    default:
-      $ref: "../api/responses/server-error.yaml"
-
 delete:
   summary: Deletes a single user.
   #This is the function that would be called from ../../controllers/index.js

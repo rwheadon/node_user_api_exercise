@@ -16,7 +16,8 @@ async function generateRandomSalt() {
 async function secureHashString(stringToHash) {
     try {
         let saltString = await generateRandomSalt();
-        return hashed = await bcrypt.hash(stringToHash, saltString);
+        const hashed = await bcrypt.hash(stringToHash, saltString);
+        return hashed;
     } catch (e) {
         console.error("Could not hash the password", e);
         return 'PASSWORD_NOT_HASHED';
