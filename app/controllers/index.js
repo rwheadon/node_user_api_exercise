@@ -1,5 +1,4 @@
 const { getAllUsers, findUser, createUser, updateUser, deleteUser } = require('./user.controller');
-const { fetchSomething } = require('./additional');
 
 module.exports = {
     getAllUsers,
@@ -7,5 +6,4 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
-    fetchSomething,
 }

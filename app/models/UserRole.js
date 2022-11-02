@@ -1,35 +1,32 @@
 const Sequelize = require('sequelize');
 const db = require('../configs/database');
 
-const User = db.define('users', {
+const UserRole = db.define('users_roles', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
-    username: {
+    userId: {
         type: Sequelize.STRING,
+        field: 'user_id',
         unique: true
     },
-    firstname: {
+    roleId: {
+        field: 'role_id',
         type: Sequelize.STRING
     },
-    lastname: {
-        type: Sequelize.STRING
-    },
-    email: {
-        type: Sequelize.STRING
-    },
-    password: {
-        type: Sequelize.STRING
+    expireDate: {
+        field: 'expire_date',
+        type: Sequelize.DATE
     },
     updatedAt: {
         field: 'updated_at',
-        type: Sequelize.DATE
+            type: Sequelize.DATE
     },
     createdAt: {
         field: 'created_at',
-        type: Sequelize.DATE
+            type: Sequelize.DATE
     }
 });
 
-module.exports = User;
+module.exports = UserRole;

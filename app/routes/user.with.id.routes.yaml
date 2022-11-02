@@ -1,7 +1,6 @@
 # this file fulfills swagger routing on the /user/{id} path
 delete:
   summary: Deletes a single user.
-  #This is the function that would be called from ../../controllers/index.js
   operationId: deleteUser
   description: User DELETE operation by user id
   tags:

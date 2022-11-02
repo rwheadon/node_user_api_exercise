@@ -2,7 +2,6 @@
 get:
   summary: Returns a list of all the users.
   operationId: getAllUsers
-  #This is the function that would be called from ../../controllers/index.js
   description: Test for the api GET operation
   tags:
     - User

@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  description: I AM A SAMPLE SCAFFOLD CHANGE ME
+  description: User Microservice (API)
   version: 1.0.0
-  title: SAMPLE SCAFFOLD API DOCS
+  title: User API DOCS
 servers:
   - url: /api/v1
 
@@ -13,6 +13,4 @@ paths:
     $ref: "../routes/user.routes.yaml"
   /users:
     $ref: "../routes/users.routes.yaml"
-  /additional:
-    $ref: "../routes/additional.yaml"
 

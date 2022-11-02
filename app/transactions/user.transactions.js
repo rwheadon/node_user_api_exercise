@@ -10,8 +10,6 @@ async function deleteUserById(userId) {
             }
         });
         return destroyed>0;
-        // const user = await User.findByPk(userId);
-        // return !user;
     } catch (e) {
         console.error("Error deleting user.", e);
         return undefined;
@@ -63,8 +61,8 @@ async function createUser(data) {
     } catch (e) {
         const emessages = [];
         if (e.errors) {
-            for (let i=0; i<e.errors.length; i++) {
-                const vei = e.errors[i];
+            for (const element of e.errors) {
+                const vei = element;
                 emessages.push(vei.message);
             }
         }

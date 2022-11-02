@@ -4,9 +4,15 @@ const {maskData} = require('../helpers/securedata.helpers');
 const {secureHashString} = require('../helpers/encryption.helpers');
 const helpers = require('../helpers/helpers');
 const {findUserById} = require("../transactions/user.transactions");
+const {isUserAdmin} = require("../helpers/auth.helpers");
 
 async function getAllUsers(req, res) {
-    // at this time we only want users with an admin role to be able to access ALL users
+    // todo: we only want users with an admin role to be able to access ALL users
+    // req.user (jwttoken will contain this data when it is finished?)
+    const tempUser = {
+        
+    };
+    if (!isUserAdmin())
     try {
         const users = await User.findAll();
         console.log(users.length);
@@ -56,6 +62,7 @@ async function createUser(req, res) {
         {'name': 'lastname', 'minLen': 2, 'maxLen': 64, 'type': 'string'},
         {'name': 'password', 'minLen': 8, 'maxLen': 255, 'type': 'string'},
         {'name': 'username', 'minLen': 8, 'maxLen': 100, 'type': 'string'},
+        {'name': 'email', 'minLen': 5, 'maxLen': 254, 'type': 'string'},
     ];
     const verifiedData = helpers.verifyRequiredFieldData(requiredFields, {'payload': req.body});
     if (verifiedData.missingOrInvalidFields && verifiedData.missingOrInvalidFields.length > 0) {
@@ -71,8 +78,9 @@ async function createUser(req, res) {
         "lastname": req.body.lastname,
         "password": req.body.password,
         "username": req.body.username,
+        "email": req.body.email,
     };
-    if (data.firstname && data.lastname && data.username && data.password) {
+    if (data.firstname && data.lastname && data.username && data.password && data.email) {
         try {
             //hash the password
             try {
@@ -114,8 +122,7 @@ async function createUser(req, res) {
 }
 
 async function updateUser(req, res) {
-    let updatedRows;
-    const {firstname, lastname, username, id} = req.body;
+    const {firstname, lastname, id} = req.body;
     if (!id) {
         res.status(400);
         res.json({"message": "id is required"});
@@ -150,7 +157,6 @@ async function updateUser(req, res) {
         }
         user = await findUserById(id);
         res.json(user);
-        return;
     } catch (e) {
         console.error("Problem updating the user")
     }
@@ -162,11 +168,11 @@ async function deleteUser(req, res) {
             const deleted = await userTransactionLogic.deleteUserById(req.params.id);
             if (deleted) {
                 res.json({"message": "USER DELETED"});
-                return;
+                // return;
             } else {
                 res.status(400);
                 res.json({"message": "The user was not deleted. Does the user exist?", "logtime": new Date()});
-                return;
+                // return;
             }
         } catch (e) {
             console.error("Error deleting user.", e);

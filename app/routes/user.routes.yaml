@@ -1,7 +1,6 @@
 # this file fulfills user requests on the /user path
 get:
   summary: Returns a single user.
-  #This is the function that would be called from ../../controllers/index.js
   operationId: findUser
   description: User GET operation. uses additional parameters if provided.
   tags:
@@ -21,6 +20,8 @@ get:
               firstname:
                 type: string
               lastname:
+                type: string
+              email:
                 type: string
               updatedAt:
                 type: string
@@ -107,7 +108,7 @@ put:
             - id
   responses:
     '200':
-      description: Returns created user record
+      description: Returns updated user record
       content:
         application/json:
           schema:
