@@ -1,24 +1,28 @@
-const User = require('../models/User');
+// const User = require('../models/User');
+const config = require('../configs/config');
+const { models } = require('../models');
+// const { User } = require('../models');
 const userTransactionLogic = require('../transactions/user.transactions');
+const usersRolesLogic = require('../logic/users.roles.logic');
 const {maskData} = require('../helpers/securedata.helpers');
 const {secureHashString} = require('../helpers/encryption.helpers');
 const helpers = require('../helpers/helpers');
-const {findUserById} = require("../transactions/user.transactions");
-const {isUserAdmin} = require("../helpers/auth.helpers");
+const {isUserAdmin} = require('../helpers/auth.helpers');
 
 async function getAllUsers(req, res) {
     // todo: we only want users with an admin role to be able to access ALL users
     // req.user (jwttoken will contain this data when it is finished?)
-    const tempUser = {
-        
-    };
-    if (!isUserAdmin())
+    // const tempUser = {
+    //
+    // };
+    // if (!isUserAdmin())
     try {
-        const users = await User.findAll();
+        const users = await userTransactionLogic.getAllUsers();
         console.log(users.length);
         res.status(201);
         res.json(users);
     } catch (e) {
+        console.error(e);
         res.json({"error":e.code, "detail": e});
     }
 }
@@ -35,7 +39,7 @@ async function findUser(req, res) {
         }
 
         if (!user && req.query.username) {
-            const user = await userTransactionLogic.findUserByUsername(req.query.username);
+            user = await userTransactionLogic.findUserByUsername(req.query.username);
             if (user) {
                 res.json(user);
                 return;
@@ -79,6 +83,7 @@ async function createUser(req, res) {
         "password": req.body.password,
         "username": req.body.username,
         "email": req.body.email,
+        "roles": req.body.roles,
     };
     if (data.firstname && data.lastname && data.username && data.password && data.email) {
         try {
@@ -94,11 +99,20 @@ async function createUser(req, res) {
                 throw err;
             }
 
+            // const newUser = await userTransactionLogic.createUser(data);
             const newUser = await userTransactionLogic.createUser(data);
-            res.json(newUser);
+
+            // associate any roles that were brought in
+            let associatedRoles;
+            if(req.body.roles && req.body.roles.length > 0) {
+                associatedRoles = await usersRolesLogic.buildUserRoleAssociations(newUser, req.body.roles);
+            }
+
+
+            res.json({"user": newUser, "userRoles": associatedRoles});
             return;
         } catch (e) {
-            console.error('Error in createUser : ', e);
+            console.error(`Error in createUser : ${e}`);
             res.json({"error": e});
             return;
         }
@@ -122,17 +136,15 @@ async function createUser(req, res) {
 }
 
 async function updateUser(req, res) {
-    const {firstname, lastname, id} = req.body;
+    const {firstname, lastname, id, roles} = req.body;
     if (!id) {
         res.status(400);
         res.json({"message": "id is required"});
         return;
     }
     //one of the following fields is necessary to proceed
-    const updatableFields = [
-        {'name': 'firstname', 'minLen': 2, 'maxLen': 255, 'type': 'string'},
-        {'name': 'lastname', 'minLen': 2, 'maxLen': 255, 'type': 'string'},
-    ];
+    const updatableFields = config.updatableUserFields;
+
     const verifiedUpdatableData = helpers.verifyRequiredFieldData(updatableFields, {'payload': req.body});
     if (verifiedUpdatableData.missingOrInvalidFields && verifiedUpdatableData.missingOrInvalidFields.length > 1) {
         res.status(400);
@@ -144,21 +156,23 @@ async function updateUser(req, res) {
     }
 
     try {
-        let user = await findUserById(id);
+        const user = await userTransactionLogic.findUserById(id);
         if (user) {
-            await User.update({
-                lastname,
-                firstname,
-            }, {
-                where: {
-                    id,
+            let updatedUser = await userTransactionLogic.updateUser(id, {firstname, lastname});
+            if (updatedUser && roles && Object.keys(roles).length) {
+                const updatedRolesReport = await usersRolesLogic.updateUserRoleAssociations(updatedUser, roles);
+                if (updatedRolesReport && Object.keys(updatedRolesReport).length) {
+                    updatedUser = await userTransactionLogic.findUserById(id);
+                    updatedUser['roleUpdateSummary'] = updatedRolesReport;
                 }
-            });
+            }
+            res.json(updatedUser);
+        } else {
+            res.status(404);
+            res.json({"message": "The user was not found."});
         }
-        user = await findUserById(id);
-        res.json(user);
     } catch (e) {
-        console.error("Problem updating the user")
+        console.error("Problem updating the user", e);
     }
 }
 

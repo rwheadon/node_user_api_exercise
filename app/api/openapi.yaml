@@ -13,4 +13,7 @@ paths:
     $ref: "../routes/user.routes.yaml"
   /users:
     $ref: "../routes/users.routes.yaml"
-
+  /role:
+    $ref: "../routes/role.routes.yaml"
+  /roles:
+    $ref: "../routes/roles.routes.yaml"

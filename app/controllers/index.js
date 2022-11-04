@@ -1,4 +1,5 @@
 const { getAllUsers, findUser, createUser, updateUser, deleteUser } = require('./user.controller');
+const { getAllRoles, findRole, createRole } = require('./role.controller');
 
 module.exports = {
     getAllUsers,
@@ -6,4 +7,7 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
+    getAllRoles,
+    findRole,
+    createRole,
 }

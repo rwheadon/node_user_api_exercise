@@ -1,0 +1,29 @@
+# this file fulfills routes on the /roles path
+get:
+  summary: Returns a list of all the roles.
+  operationId: getAllRoles
+  description: List of available user roles
+  tags:
+    - Role
+  responses:
+    '200':
+      description: List of user roles
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+              name:
+                type: string
+              codename:
+                type: string
+              description:
+                type: string
+              updatedAt:
+                type: string
+              createdAt:
+                type: string
+    default:
+      $ref: "../api/responses/server-error.yaml"
