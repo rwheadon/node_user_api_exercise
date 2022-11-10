@@ -17,6 +17,10 @@ familial or group relationship management (Though I don't recomment it).
 
 When a User is created it must have a unique username and of course auto-generated id.
 
+## swagger ##
+Docs are generated automatically by design convention in routes.  
+http://localhost:{env.development.port}/api-docs/
+
 ## Authentication Operations ##
 Authentication operations are not present yet
 
